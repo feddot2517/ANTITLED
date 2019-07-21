@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
-import { DatePicker } from 'antd';
-import customLayout from "./customLayout"
-
+import CustomLayout from "./customLayout"
+import BaseRouter from './routes';
+import { BrowserRouter as Router } from 'react-router-dom';
+import {withTracker} from 'meteor/react-meteor-data';
+import Product from '../models/product';
 
 // App component - represents the whole app
 class App extends Component {
     render() {
-        console.log(this.props);
         return (
-            <customLayout></customLayout>
-    );
+            <div >
+                <Router  >
+            <CustomLayout  >
+                <BaseRouter products={this.props.products}/>
+            </CustomLayout>
+                </Router>
+            </div>
+         );
     }
 }
 
-export default App;
+export default withTracker(() => {
+    return {
+        products: Product.find().fetch()
+    };
+})(App);
