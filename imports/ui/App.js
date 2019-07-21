@@ -12,7 +12,7 @@ class App extends Component {
             <div >
                 <Router  >
             <CustomLayout  >
-                <BaseRouter products={this.props.products}/>
+                <BaseRouter/>
             </CustomLayout>
                 </Router>
             </div>
@@ -20,8 +20,4 @@ class App extends Component {
     }
 }
 
-export default withTracker(() => {
-    return {
-        products: Product.find().fetch()
-    };
-})(App);
+export default App

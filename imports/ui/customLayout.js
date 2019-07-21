@@ -27,7 +27,7 @@ class CustomLayout extends Component {
             <Layout className="layout">
                 <Header>
                     <Menu
-                        theme="black"
+                        theme="dark"
                         mode="horizontal"
                         style={{lineHeight: '64px', float: 'left', color: "ff2"}}
                     >
