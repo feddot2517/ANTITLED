@@ -8,12 +8,14 @@ import {
 } from 'antd';
 
 
+
+
 class OrderForm extends React.Component {
 
     addNewProduct = e => {
         Meteor.call("addProduct", this.state.productName, this.state.productPrice, this.state.productType);
         alert("its ok");
-    }
+    };
 
     state = {
         productName: '',
