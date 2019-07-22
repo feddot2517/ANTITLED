@@ -7,6 +7,10 @@ import {withTracker} from 'meteor/react-meteor-data';
 
 class orderView extends React.Component {
 
+    deleteOrder = (orderId) => {
+        Meteor.call("delOrder", orderId);
+    };
+
     render() {
         return (
             <div>
@@ -21,7 +25,7 @@ class orderView extends React.Component {
                             <div style={{display: "inline-block", marginRight: 15}}>{order.email} </div>
                             <div style={{display: "inline-block", marginRight: 15}}>{order.phone} </div>
                             <div style={{display: "inline-block"}}>
-                                <Button type="danger">X</Button>
+                                <Button onClick={()=>this.deleteOrder(order._id)} type="danger">X</Button>
                             </div>
                             <div>
                             </div>

@@ -2,6 +2,8 @@ import React from 'react';
 
 
 import {
+    Upload,
+    Icon,
     Form,
     Input,
     Button,
@@ -68,6 +70,15 @@ class OrderForm extends React.Component {
                            onChange={this.onChangeType}
                            type="productType"
                     />
+                </Form.Item>
+
+                <Form.Item>
+                    <h1>Upload image for product (JPG, >2MB)</h1>
+                    <Upload >
+                        <Button>
+                            <Icon type="upload" /> Click to Upload
+                        </Button>
+                    </Upload>,
                 </Form.Item>
 
                 <Form.Item>

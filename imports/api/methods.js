@@ -24,3 +24,10 @@ Meteor.methods({
     }
 });
 
+Meteor.methods({
+    'delOrder'(orderId) {
+        Order.remove({_id: orderId});
+    }
+});
+
+
