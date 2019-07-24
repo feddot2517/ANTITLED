@@ -5,13 +5,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import {withTracker} from 'meteor/react-meteor-data';
 import Product from '../models/product';
 
+
 // App component - represents the whole app
 class App extends Component {
     render() {
+        console.log(this.props);
         return (
             <div >
                 <Router  >
-            <CustomLayout  >
+            <CustomLayout >
                 <BaseRouter/>
             </CustomLayout>
                 </Router>
@@ -20,4 +22,4 @@ class App extends Component {
     }
 }
 
-export default App
+export default App;

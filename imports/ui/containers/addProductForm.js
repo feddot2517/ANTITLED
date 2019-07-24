@@ -1,31 +1,71 @@
 import React from 'react';
 import { Cascader } from 'antd';
+import Images from "../../models/image";
 
 
 import {Button, Form, Input, Upload, Icon, message} from 'antd';
 
+function getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+
+}
+
+function beforeUpload(file) {
+    const isJPG = file.type === 'image/jpeg';
+    const isPNG = file.type === 'image/png';
+
+
+    if (!isJPG && !isPNG) {
+        message.error('You can only upload JPG or PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+
+
+    return (isJPG || isPNG) &&  isLt2M;
+}
 
 
 class OrderForm extends React.Component {
 
-    props1 = {
-        name: 'file',
-        action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-        headers: {
-            authorization: 'authorization-text',
-        },
-        onChange(info) {
-            if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
-            if (info.file.status === 'done') {
-                message.success(`${info.file.name} file uploaded successfully`);
-                console.log(info.file.url);
-            } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} file upload failed.`);
-            }
-        },
-    };
+    handleChange = (info) => {
+        if (info.file.status === 'uploading') {
+            this.setState({ loading: true });
+            return;
+        }
+        if (info.file.status === 'done') {
+            console.log(info.file);
+
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj, imageUrl => {
+
+                    // Images.insert({
+                    //   file: imageUrl.split(',')[1],
+                    //   isBase64: true, // <— Mandatory
+                    //   fileName: 'pic.png', // <— Mandatory
+                    //   type: info.file.originFileObj.type
+                    // });
+
+                    if(this.props.handleImage)
+                        this.props.handleImage({
+                            file: imageUrl.split(',')[1],
+                            isBase64: true,
+                            fileName: 'pic.png',
+                            type: info.file.originFileObj.type
+                        });
+
+                    this.setState({
+                        imageUrl,
+                        loading: false,
+                    })
+                }
+            );
+        }
+    }
 
 
     options = [
@@ -46,14 +86,15 @@ class OrderForm extends React.Component {
 
   addNewProduct = e => {
     Meteor.call("addProduct", this.state.productName, this.state.productPrice, this.state.productType);
-    alert("its ok");
+    message.success("New product was added");
     this.props.history.push('/');
   };
 
   state = {
     productName: '',
     productPrice: '',
-    productType: ''
+    productType: '',
+    loading: false,
   };
 
    onChange = value => {
@@ -70,6 +111,14 @@ class OrderForm extends React.Component {
   };
 
   render() {
+      console.log(Images.find().fetch());
+      const uploadButton = (
+          <div>
+              <Icon type={this.state.loading ? 'loading' : 'plus'} />
+              <div className="ant-upload-text">Upload</div>
+          </div>
+      );
+      const imageUrl = this.state.imageUrl;
     return (
       <Form>
 
@@ -104,11 +153,17 @@ class OrderForm extends React.Component {
         </Form.Item>
 
           <Form.Item>
-              <Upload {...this.props1}>
-                  <Button>
-                      <Icon type="upload" /> Upload image
-                  </Button>
-              </Upload>,
+              <Upload
+                  name="avatar"
+                  listType="picture-card"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  action="//jsonplaceholder.typicode.com/posts/"
+                  beforeUpload={beforeUpload}
+                  onChange={this.handleChange}
+              >
+                  {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+              </Upload>
           </Form.Item>
 
         <Form.Item>

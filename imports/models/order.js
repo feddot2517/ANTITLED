@@ -18,6 +18,11 @@ const Order = Class.create({
             optional: true,
 
         },
+        username: {
+            type: String,
+            optional: true,
+
+        },
     },
 });
 

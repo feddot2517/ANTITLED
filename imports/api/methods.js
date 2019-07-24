@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import Product from "../models/product";
 import Order from "../models/order";
+import { Accounts } from 'meteor/accounts-base'
 
 Meteor.methods({
     'addProduct'(productName, productPrice, productType) {
@@ -14,11 +15,12 @@ Meteor.methods({
 });
 
 Meteor.methods({
-    'addOrder'(order, email, phone) {
+    'addOrder'(order, email, phone, username) {
         const newOrder = new Order({
             order: order,
             email: email,
-            phone: phone
+            phone: phone,
+            username: username,
         });
         newOrder.save();
     }
@@ -30,4 +32,15 @@ Meteor.methods({
     }
 });
 
+
+Meteor.methods({
+    'addUser'(values,callback) {
+
+        Accounts.createUser({
+            username: values.username,
+            password: values.password,
+        },callback);
+        console.log(values.username);
+    },
+});
 

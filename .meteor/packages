@@ -22,3 +22,6 @@ static-html
 jagi:astronomy
 react-meteor-data
 ostrio:files
+accounts-base
+accounts-ui
+accounts-password

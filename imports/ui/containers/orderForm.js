@@ -8,12 +8,13 @@ import {
 } from 'antd';
 import {withTracker} from "meteor/react-meteor-data";
 import Product from "../../models/product";
+import {withRouter} from "react-router";
 
 
 class OrderForm extends React.Component {
 
     addOrder = e => {
-        Meteor.call("addOrder", this.props.order.name, this.state.email, this.state.phone);
+        Meteor.call("addOrder", this.props.order.name, this.state.email, this.state.phone, this.props.currentUser && this.props.currentUser.username);
         alert("Your order has been added");
         this.props.history.push('/');
     };
@@ -80,5 +81,6 @@ export default withTracker((props) => {
     const {id} =  props.match.params;
     return {
         order: Product.findOne({_id: id}),
+        currentUser: Meteor.user(),
     };
 })(orderForm);
